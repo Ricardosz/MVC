@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ShoppingCart.Models.Book>
+@{
+    ViewBag.Title = "Contanct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>图书管理</h2>
+
+@Html.ActionLink("添加图书", "Create")
+@using (Ajax.BeginForm(
+     new AjaxOptions
+               {
+                                                        HttpMethod = "get",
+                                                        InsertionMode = InsertionMode.Replace,
+                                                        UpdateTargetId = "booksList"
+                                                    }))
+{
+    <input type="search" name="SearchString" />
+    <input type="submit" value="搜索" />
+}
+<br />
+@Html.Partial("_books2", Model)

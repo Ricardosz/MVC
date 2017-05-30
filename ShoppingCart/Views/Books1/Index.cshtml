@@ -1,0 +1,19 @@
+﻿@model IEnumerable<ShoppingCart.Models.Book>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>图书列表</h2>
+@using (Ajax.BeginForm(new AjaxOptions
+{
+ HttpMethod = "get",
+  InsertionMode = InsertionMode.Replace,
+   UpdateTargetId = "booksList"
+   }))
+{
+    <input type="search" name="SearchString" />
+        <input type="submit" value="搜索" />
+}
+<br/>
+@Html.Partial("_books", Model)

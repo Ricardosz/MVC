@@ -1,0 +1,63 @@
+﻿@model ShoppingCart.ViewModels.CartViewModel
+
+@{
+    ViewBag.Title = "Cart Details";
+}
+
+<h2>购物车详情</h2>
+
+<div id="cartDetails">
+    <table class="table table-bordered table-hover table-striped" style="display: none" data-bind="visible: cart.cartItems().length > 0">
+        <tr>
+            <th>Book</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>&nbsp;</th>
+        </tr>
+        <!-- ko foreach: { data: cart.cartItems, beforeRemove: fadeOut } -->
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", "Books")" data-bind="appendToHref: book.id, text: book.title"></a>
+            </td>
+            <td data-bind="text: '$' + book.salePrice"></td>
+            <td>
+                <upsert-cart-item params="cartItem: $data, showButton: false"></upsert-cart-item>
+            </td>
+            <td data-bind="text: '$' + quantity.subTotal()"></td>
+            <td>
+                <button type="button" class="btn btn-danger" data-bind="click: $parent.deleteCartItem, visible: !$parent.sending()"><span class="glyphicon glyphicon-trash"></span></button>
+            </td>
+        </tr>
+        <!-- /ko -->
+    </table>
+
+    <div class="progress" data-bind="visible: sending">
+        <div class="progress-bar progress-bar-info progress-bar-striped active"
+             role="progressbar" aria-valuenow="100"
+             aria-valuemin="0" aria-valuemax="100"
+             style="width: 100%">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" style="display: none" data-bind="visible: cart.cartItems().length == 0">
+       你的购物车还是空的 <a href="@Url.Action("Index", "Home")">继续去浏览商品</a>.
+    </div>
+
+    <h3>Total: $<span data-bind="text: cart.total"></span></h3>
+</div>
+
+@Html.Partial("_CartItemForm")
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/ViewModels/CartDetailViewModel.js",
+        "~/Scripts/ViewModels/CartItemViewModel.js")
+
+    <script>
+        var model = @Html.HtmlConvertToJson(Model);
+
+        var cartDetailViewModel = new CartDetailViewModel(model);
+        ko.applyBindings(cartDetailViewModel, document.getElementById("cartDetails"));
+    </script>
+}

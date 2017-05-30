@@ -1,0 +1,25 @@
+﻿@model ShoppingCart.ViewModels.CartViewModel
+
+<a id="cart" href="@Url.Action("Index", "Carts")" data-bind="click: showCart">
+    <span class="glyphicon glyphicon-shopping-cart"></span>
+    <span class="badge" data-bind="text: cart.cartItems().length">@Model.CartItems.Count</span>
+</a>
+
+<div id="cart-summary" style="display: none">
+    <span data-bind="visible: cart.cartItems().length == 0">
+        你还没添加任何商品进购物车
+    </span>
+    <div data-bind="visible: cart.cartItems().length > 0">
+        <ul>
+            <!-- ko foreach: { data: cart.cartItems, afterAdd: fadeIn } -->
+            <li data-bind="text: book.title"></li>
+            <!-- /ko -->
+        </ul>
+        <p><strong>Total:</strong> $<span data-bind="text: cart.total"></span></p>
+        <br /><a href="@Url.Action("Index", "Carts")" class="btn btn-primary">查看订单详情</a>
+    </div>
+</div>
+
+<script>
+    var cartSummaryData = @Html.HtmlConvertToJson(Model);
+</script>

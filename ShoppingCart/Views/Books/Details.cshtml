@@ -1,0 +1,36 @@
+﻿@model ShoppingCart.ViewModels.BookViewModel
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+
+<div id="bookDetails" class="row">
+    <div class="col-md-5">
+        <img src="@Model.ImageUrl" alt="@Model.Title" title="@Model.Title" class="img-rounded" />
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+        <h3>@Model.Author.FullName</h3>
+        <p>Your Price: $@Model.SalePrice</p>
+        <p>List Price: <span style="text-decoration: line-through">$@Model.ListPrice</span></p>
+        <p class="label label-success">Save @Model.SavePercentage %</p>
+        <p>@Model.Description</p>
+    </div>
+    <div class="col-md-2 col-md-offset-2 bg-info">
+        <upsert-cart-item params="cartItem: cartItem, showButton: true"></upsert-cart-item>
+    </div>
+</div>
+
+@Html.Partial("_CartItemForm")
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/ViewModels/BookDetailViewModel.js",
+        "~/Scripts/ViewModels/CartItemViewModel.js")
+
+    <script>
+        var model = @Html.HtmlConvertToJson(Model);
+
+        var bookDetailViewModel = new BookDetailViewModel(model);
+        ko.applyBindings(bookDetailViewModel, document.getElementById("bookDetails"));
+    </script>
+}
